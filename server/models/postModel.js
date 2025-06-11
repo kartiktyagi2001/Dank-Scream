@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    auhtor:{
+    author:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true

@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
 const authMiddleware = require('../middlewares/authMiddleware');
 
-const {Post} = require('../models/postModel');
+const Post = require('../models/postModel');
 
 router.get('/', posts);
-router.post('/create', authMiddleware, create);
+router.post('/new', authMiddleware, create);
 
 //fetch all posts
 async function posts(req, res){
@@ -26,14 +26,19 @@ async function create(req, res){
     const body = req.body;
 
     if(!body.content || body.content.trim() === ''){
-        return json({message: "message cannot be empty"});
+        return res.json({message: "message cannot be empty"});
     }
 
     try{
         const post = await Post.create({
             content: body.content,
-        })
-    } catch{
+            author: req.user.id,
+        });
+        return res.json({
+            message: "Post created successfully",
+            post: post
+        });
+    } catch(err){
         console.log(err);
         return res.json({message: "Error posting, try again!"});
     }

@@ -10,10 +10,10 @@ router.post('/signup', signup);
 
 
 //signin logic
-function signin(req, res){
+async function signin(req, res){
     const body = req.body;
 
-    const user = User.findOne({
+    const user = await User.findOne({
         email: body.email
     })
     
@@ -32,7 +32,7 @@ function signin(req, res){
     }
 
     //token generation
-    const token = jwt.sign({id: user._id}, secret);
+    const token = jwt.sign({id: user._id}, secret, { expiresIn: '1h' });
 
     return res.json({
         message: "Signed In",
@@ -45,7 +45,7 @@ function signin(req, res){
 async function signup(req, res){
     const body = req.body;
 
-    const existingUser = User.findOne({
+    const existingUser = await User.findOne({
         email: body.email
     })
 
@@ -64,7 +64,7 @@ async function signup(req, res){
     })
     const id = user._id;
 
-    const token = jwt.sign({id},secret);
+    const token = jwt.sign({id},secret, { expiresIn: '1h' });
 
     console.log(token);
 

@@ -1,21 +1,27 @@
+require('dotenv').config({path: './.env'});
+console.log('Loaded variables:', {
+  PORT: process.env.PORT,
+  MONGODB_URI: !!process.env.MONGODB_URI, // Shows true/false
+  JWT_SECRET: !!process.env.JWT_SECRET
+});
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config()
 const cors = require('cors')
 
 app.use(cors());
 app.use(express.json())
 
 const port = process.env.PORT || 3000;
-const dbURI = process.env.MONGODB_URI || "mongodb+srv://kartiktyagi1201:V2hXL6CCVE9RlAyt@cluster0.2a3ro7a.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const dbURI = process.env.MONGODB_URI
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
 
 
 app.use('/user', userRouter);
 app.use('/posts', postRouter);
+
+console.log(process.env.JWT_SECRET);
 
 
 app.listen(port, ()=>{
