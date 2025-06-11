@@ -15,6 +15,10 @@ async function posts(req, res){
         const posts = await Post.find()
         .populate('author', 'username')
         .sort({createdAt: -1}); // Sort by createdAt in descending order
+
+        return res.json({
+            posts: posts
+        })
     } catch(err){
         console.log(err);
         return res.json({message: "Error fetching posts"});
