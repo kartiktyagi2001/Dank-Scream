@@ -1,9 +1,4 @@
 require('dotenv').config({path: './.env'});
-console.log('Loaded variables:', {
-  PORT: process.env.PORT,
-  MONGODB_URI: !!process.env.MONGODB_URI, // Shows true/false
-  JWT_SECRET: !!process.env.JWT_SECRET
-});
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -17,7 +12,7 @@ const dbURI = process.env.MONGODB_URI
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
 
-
+app.use('/', postRouter);
 app.use('/user', userRouter);
 app.use('/posts', postRouter);
 
