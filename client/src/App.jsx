@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import{BrowserRouter} from 'react-router-dom'
+import{BrowserRouter, Routes, Route} from 'react-router-dom'
 import Auth from './components/auth'
 import Navbar from './components/navbar'
+import Posts from './components/posts'
 import './App.css'
 
 function App() {
@@ -11,9 +12,13 @@ function App() {
     <div>
       <BrowserRouter>
         <Navbar />
-      </BrowserRouter>
 
-      <Auth />
+        <Routes>
+          <Route path='/auth' element={<Auth />} />
+          <Route path='/' element={<Posts />} />
+        </Routes>
+
+      </BrowserRouter>
     </div>
     
   )

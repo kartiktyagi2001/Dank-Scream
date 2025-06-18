@@ -28,7 +28,7 @@ export default function Auth(){
         }
 
         try {
-            const {data} = await axios.post(`/user/${state}`, {
+            const {data} = await axios.post(`http://localhost:3000/user/${state}`, {
                 email,
                 password,
                 ...(state === 'signup' && {firstName, lastName})

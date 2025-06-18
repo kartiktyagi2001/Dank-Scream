@@ -17,8 +17,9 @@ async function posts(req, res){
         .sort({createdAt: -1}); // Sort by createdAt in descending order
 
         return res.json({
-            posts: posts
+            posts: posts    //sends array in obj format
         })
+
     } catch(err){
         console.log(err);
         return res.json({message: "Error fetching posts"});
