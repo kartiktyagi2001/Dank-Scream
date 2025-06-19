@@ -18,15 +18,17 @@ async function signin(req, res){
     })
     
     //user doesn't exist
-    if(!user._id){
-        res.json({
+    if(!user){
+        return res.status(404).json({
+            success: false,
             message: "User doesn't exist. Please Signup!"
         })
     }
 
     //pwd incorrect
     if(user.password !== body.password){
-        res.json({
+        return res.status(401).json({
+            success: false,
             message: "Incorrect Password"
         })
     }
@@ -34,9 +36,13 @@ async function signin(req, res){
     //token generation
     const token = jwt.sign({id: user._id}, secret, { expiresIn: '1h' });
 
+    console.log(token);
+
     return res.json({
+        success: true,   //fe relies on this
         message: "Signed In",
-        token: token
+        token,
+        user
     })
 
 }
@@ -49,16 +55,18 @@ async function signup(req, res){
         email: body.email
     })
 
-    if(existingUser._id){
-        res.json({
-            message: "User already exists. Please Signin!"
+    if(existingUser){
+        console.log("user exists!")
+        return res.json({
+            success: false,
+            message: "User already exists. Please Signin!"            
         })
     }
 
     //creating user
     const user = await User.create({
         email: body.email,
-        firstName: body.FirstName,
+        firstName: body.firstName,
         lastName: body.lastName,
         password: body.password
     })
@@ -69,8 +77,10 @@ async function signup(req, res){
     console.log(token);
 
     return res.json({
+        success: true,   //fe relies on this
         message: "User Created Successfully",
-        token: token
+        token,
+        user
     })
 }
 

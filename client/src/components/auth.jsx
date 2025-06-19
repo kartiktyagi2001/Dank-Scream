@@ -9,7 +9,8 @@ export default function Auth(){
     const [lastName, setLastName] = useState("")
     const [state, setState] = useState('signin');
     const [user, setUser] = useState(null);
-    const [showAuth, setShowAuth] = useState(true)
+    const [showAuth, setShowAuth] = useState(true);
+    const [error, setError] = useState(null);
 
     const handleAuth = async(event)=>{
 
@@ -34,14 +35,30 @@ export default function Auth(){
                 ...(state === 'signup' && {firstName, lastName})
             });
 
+            console.log("Response data:", data);
+
+
             if(data.success){
                 setUser(data.user);
                 setShowAuth(false);
+            } else{
+                setError(data.message || "Authentication failed!")
             }
         } catch(error){
-            console.log(error);
+            const errmsg = error.response?.data?.message || error.message || "Network error!"
+
+            setError(errmsg);
         }
-    }
+    };
+
+    //Resets form fields when switching state
+    const switchState = (mode) => {
+        setState(mode);
+        setEmail("");
+        setPassword("");
+        setFirstName("");
+        setLastName("");
+    };
 
     if (!showAuth) return null; //outer div onclick will not work because the div won't be able to know if the state is updated
     
@@ -56,37 +73,38 @@ export default function Auth(){
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-slate-900">First Name</label>
-                            <input type="text" placeholder="Kartik" onChange={(e)=> setFirstName(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
+                            <input type="text" value={firstName} placeholder="Kartik" onChange={(e)=> setFirstName(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
                         </div>
 
                         <div>
                             <label className="block text-sm font-medium text-slate-900">Last Name</label>
-                            <input type="text" placeholder="Tyagi" onChange={(e)=> setLastName(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1 " />
+                            <input type="text" value={lastName} placeholder="Tyagi" onChange={(e)=> setLastName(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1 " />
                         </div>
                     </div>
                 )}
 
                 <div>
                     <p className="block text-sm font-medium text-slate-900">Email</p>
-                    <input type="email" placeholder="kartik@mail.com" onChange={(e)=> setEmail(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
+                    <input type="email" value={email} placeholder="kartik@mail.com" onChange={(e)=> setEmail(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
                 </div>
 
                 <div>
                     <p className="block text-sm font-medium text-slate-900">Password</p>
-                    <input type="password" placeholder="123@pwd" onChange={(e) => setPassword(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
+                    <input type="password" value={password} placeholder="123@pwd" onChange={(e) => setPassword(e.target.value)} className="w-full border px-2 py-1 rounded-sm mt-1" />
                 </div>
 
                 {state === 'signin' ? (
                     <p >
-                        New User? <span onClick={()=> setState("signup")} className="cursor-pointer underline text-slate-600">Signup here</span>
+                        New User? <span onClick={()=>switchState("signup")} className="cursor-pointer underline text-slate-600">Signup here</span>
                     </p>
                 ): (
                     <p className="text-slate-900">
-                        Existing User? <span onClick={()=> setState("signin")} className="cursor-pointer text-slate-600 underline">Signin here</span>
+                        Existing User? <span onClick={()=>switchState("signin")} className="cursor-pointer text-slate-600 underline">Signin here</span>
                     </p>
                 )}
 
-                <button className='w-full bg-slate-600 hover:bg-slate-700 text-white py-2 rounded-md mt-2 transform active:scale-95 transition duration-150 ease-in-out'>
+                <button type="submit" 
+                className='w-full bg-slate-600 hover:bg-slate-700 text-white py-2 rounded-md mt-2 transform active:scale-95 transition duration-150 ease-in-out'>
                     {state === "signup" ? "Create Account" : "Signin"}
                 </button>
             </form>
