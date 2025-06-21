@@ -7,14 +7,17 @@ import './App.css'
 
 function App() {
 
+  const [user, setUser] = useState(null);
+  const [showAuth, setShowAuth] = useState(true);
+
   return (
 
     <div>
       <BrowserRouter>
-        <Navbar />
+        <Navbar showAuth={showAuth} setShowAuth={setShowAuth}  />
 
         <Routes>
-          <Route path='/auth' element={<Auth />} />
+          <Route path='/auth' element={<Auth user={user} setUser={setUser} showAuth={showAuth} setShowAuth={setShowAuth} />} />
           <Route path='/' element={<Posts />} />
         </Routes>
 

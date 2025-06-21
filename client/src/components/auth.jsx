@@ -1,15 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function Auth(){
+export default function Auth({user, setUser, showAuth, setShowAuth}){
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [state, setState] = useState('signin');
-    const [user, setUser] = useState(null);
-    const [showAuth, setShowAuth] = useState(true);
+    // const [user, setUser] = useState(null);
+    // const [showAuth, setShowAuth] = useState(true);
     const [error, setError] = useState(null);
 
     const handleAuth = async(event)=>{
@@ -39,6 +39,7 @@ export default function Auth(){
 
 
             if(data.success){
+                localStorage.setItem("token", data.token);
                 setUser(data.user);
                 setShowAuth(false);
             } else{
