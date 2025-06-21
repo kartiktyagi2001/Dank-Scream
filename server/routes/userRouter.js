@@ -7,6 +7,7 @@ const User = require('../models/userModel');
 
 router.post('/signin', signin);
 router.post('/signup', signup);
+router.get('/verify', Verify)
 
 
 //signin logic
@@ -82,6 +83,38 @@ async function signup(req, res){
         token,
         user
     })
+}
+
+async function Verify(req, res){
+    const authHeader = req.headers.authorization; //sent from FE
+
+    if(!authHeader || !authHeader.startsWith("Bearer ")) {
+        return re.json({
+            success: false,
+            message: "No token provided, please Signin!"
+        });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try{
+        const decoded = jwt.verify(token, secret);
+        const user = await User.findById(decoded.id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+         res.json({
+            success: true,
+            user
+         });
+    } catch(err){
+        return res.json({
+            success: false,
+            message: "Invalid or expired token, Signin again!"
+        });
+    }
 }
 
 module.exports = router;
