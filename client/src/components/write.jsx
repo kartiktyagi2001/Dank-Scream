@@ -47,7 +47,7 @@ export default function Write({ user, setUser, setShowAuth }) {
           try {
             const token = localStorage.getItem("token");
             const { data } = await axios.post(
-              "http://localhost:3000/post/new",
+              "http://localhost:3000/posts/new",
               { content },
               {
                 headers: {
@@ -62,6 +62,7 @@ export default function Write({ user, setUser, setShowAuth }) {
             }
           } catch (err) {
             alert("Failed to create post");
+            console.log(err);
           }
         }}
       >
