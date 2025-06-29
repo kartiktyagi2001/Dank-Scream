@@ -3,6 +3,7 @@ import{BrowserRouter, Routes, Route} from 'react-router-dom'
 import Auth from './components/auth'
 import Navbar from './components/navbar'
 import Posts from './components/posts'
+import Write from './components/write'
 import './App.css'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path='/auth' element={<Auth user={user} setUser={setUser} showAuth={showAuth} setShowAuth={setShowAuth} />} />
           <Route path='/' element={<Posts />} />
+          <Route path='/new' element={<Write user={user} setUser={setUser} setShowAuth={setShowAuth} />} />
         </Routes>
 
       </BrowserRouter>

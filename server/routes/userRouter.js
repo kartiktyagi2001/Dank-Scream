@@ -89,7 +89,7 @@ async function Verify(req, res){
     const authHeader = req.headers.authorization; //sent from FE
 
     if(!authHeader || !authHeader.startsWith("Bearer ")) {
-        return re.json({
+        return res.json({
             success: false,
             message: "No token provided, please Signin!"
         });
@@ -105,10 +105,11 @@ async function Verify(req, res){
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-         res.json({
-            success: true,
-            user
-         });
+        res.json({
+        success: true,
+        message: "Success",
+        user
+        });
     } catch(err){
         return res.json({
             success: false,
